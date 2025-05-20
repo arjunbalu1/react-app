@@ -14,18 +14,13 @@ const API_OPTIONS={
 
 const App = () => {
 const [searchTerm, setSearchTerm] = useState("")
-
-const [errorMessage, seterrorMessage] = useState("")
-
+const [errorMessage, setErrorMessage] = useState("")
 const [movieList, setMovieList] = useState([]);
-
 const [isLoading, setIsLoading] = useState(false);
 
-
 const fetchMovies = async () => {
-
   setIsLoading(true);
-  seterrorMessage("");
+  setErrorMessage("");
 
   //error handling
   try {
@@ -36,7 +31,7 @@ const fetchMovies = async () => {
     }
     const data = await response.json();
     if(data.response === "False") {
-      seterrorMessage(data.error || "Failed to fetch movies");
+      setErrorMessage(data.error || "Failed to fetch movies");
       setMovieList([]);
       return;
     }
@@ -44,7 +39,7 @@ const fetchMovies = async () => {
 
   } catch (error) {
     console.error("Error fetching movies:", error)
-    seterrorMessage("Error fetching movies. Please try again later.");
+    setErrorMessage("Error fetching movies. Please try again later.");
   } finally{
     setIsLoading(false);
   }
@@ -71,7 +66,7 @@ useEffect(() => {
             <p className='text-white text-center'>Loading...</p>
           ) : errorMessage ? (
             <p className='text-red-500'>{errorMessage}</p>
-          ) :(
+          ) : (
             <ul>
               {movieList.map((movie) => (
                 <p key={movie.id} className='text-white'>{movie.title}</p>
